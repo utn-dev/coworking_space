@@ -3,6 +3,7 @@ package com.wolfpack.coworking_space.controller;
 import com.wolfpack.coworking_space.model.Booking;
 import com.wolfpack.coworking_space.model.Room;
 import com.wolfpack.coworking_space.service.BookingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,40 +20,38 @@ public class BookingController {
     private final BookingService service;
 
     @GetMapping
-    public ResponseEntity<List<Booking>> findAll()  {
+    public ResponseEntity<List<Booking>> findAll() {
         List<Booking> list = service.findAll();
 
-        return  ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(list);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Booking> findById(@PathVariable Long id)  {
-        Booking booking = service.findById(id).orElse(new Booking()); // Mejorar la parte del opcional para no trabajarlo en el controller
-
-        return  ResponseEntity.ok(booking);
+    public ResponseEntity<Booking> findById(@PathVariable Long id) {
+        return service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
     @PostMapping
-    public ResponseEntity<Void> registerBooking (@RequestBody Booking booking)  {
+    public ResponseEntity<Void> registerBooking(@RequestBody Booking booking) {
         Booking bookingSaved = service.save(booking);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(bookingSaved.getId()).toUri();
-        return  ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking, @PathVariable("id") Long id)  {
-        booking.setId(id);
-
-        Booking bookingUpdated =service.update(id, booking);
-
-        return  ResponseEntity.ok(bookingUpdated);
+    public ResponseEntity<Booking> updateBooking(@PathVariable("id") Long id, @Valid @RequestBody Booking booking) {
+        return ResponseEntity.ok(service.update(id, booking));
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBooking(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteBooking(@PathVariable("id") Long id) {
         service.delete(id);
 
-        return  ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }

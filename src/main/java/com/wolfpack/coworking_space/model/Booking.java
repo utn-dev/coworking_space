@@ -1,6 +1,7 @@
 package com.wolfpack.coworking_space.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Room is required")
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room; // A room can have many bookings

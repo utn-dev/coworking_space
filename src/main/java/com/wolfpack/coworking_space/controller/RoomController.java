@@ -3,6 +3,7 @@ package com.wolfpack.coworking_space.controller;
 import com.wolfpack.coworking_space.model.Booking;
 import com.wolfpack.coworking_space.model.Room;
 import com.wolfpack.coworking_space.service.RoomService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,12 @@ public class RoomController {
         return  ResponseEntity.ok().body(list);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Room> findById(@PathVariable Long id)  {
-        Room room = service.findById(id).orElse(new Room()); // Mejorar la parte del opcional para no trabajarlo en el controller
-
-        return  ResponseEntity.ok(room);
+    public ResponseEntity<Room> findById(@PathVariable Long id) {
+        return service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @PostMapping
     public ResponseEntity<Void> registerRoom (@RequestBody Room room)  {
@@ -39,12 +41,8 @@ public class RoomController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@RequestBody Room room, @PathVariable("id") Long id)  {
-        room.setId(id);
-
-        Room roomUpdated =service.update(id, room);
-
-        return  ResponseEntity.ok(roomUpdated);
+    public ResponseEntity<Room> updateRoom(@PathVariable("id") Long id, @Valid @RequestBody Room room) {
+        return ResponseEntity.ok(service.update(id, room));
     }
 
     @DeleteMapping("/{id}")

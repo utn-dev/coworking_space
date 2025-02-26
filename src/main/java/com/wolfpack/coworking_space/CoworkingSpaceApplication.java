@@ -20,7 +20,7 @@ public class CoworkingSpaceApplication {
         SpringApplication.run(CoworkingSpaceApplication.class, args);
     }
 
-    @Bean
+  /*  @Bean
     public CommandLineRunner demo(RoomRepository roomRepository, BookingRepository bookingRepository) {
         return args -> {
             // Create a room
@@ -33,6 +33,6 @@ public class CoworkingSpaceApplication {
 
             System.out.println("Booking saved: Room=" + booking.getRoom().getName() + ", User=" + booking.getUser());
         };
-    }
+    }*/
 
 }

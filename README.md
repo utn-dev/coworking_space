@@ -1,48 +1,184 @@
-# 📌 Sistema de Reservas para Coworking Space
+# Documentación del Proyecto Coworking Space
 
-Este proyecto es una API REST para la gestión de reservas de salas en un espacio de coworking.
+## Descripción
+Este proyecto es una API REST desarrollada con Spring Boot para la gestión de espacios de coworking. Permite la administración de reservas y salas.
 
-## 🚀 Tecnologías utilizadas
+## Tecnologías Utilizadas
 - **Java 17**
 - **Spring Boot 3.4.2**
 - **PostgreSQL**
-- **Spring Security** (autenticación con tokens)
-- **Spring Data JPA** (manejo de base de datos)
-- **Lombok** (reducción de código repetitivo)
-- **ModelMapper** (conversión de DTOs)
-- **JWT** (manejo de autenticación)
+- **Lombok**
+- **ModelMapper**
+- **JWT para autenticación**
 
-## ⚙️ Configuración del entorno
-
-### 1️⃣ **Base de datos**
-Asegúrate de tener PostgreSQL instalado y ejecuta:
-```sql
-CREATE DATABASE coworking_space;
-```
-
-### 2️⃣ **Configuración en application.properties**
+## Configuración
+### Configuración de PostgreSQL
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/coworking_space
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
+spring.datasource.username={nombre_de_usuario}
+spring.datasource.password={contraseña}
+```
+
+### Configuración de Hibernate
+```properties
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 ```
 
-## **3️⃣ Ejecutar el proyecto**
-mvn spring-boot:run
+## Endpoints
+### Gestión de Reservas (`/v1/booking`)
+- **GET** `/v1/booking` - Obtiene todas las reservas.
 
-## **📌 Colaboración**
-```
-git clone https://github.com/tu-usuario/coworking-space.git
+  _Response:_
+  ```json
+  [
+      {
+          "id": 1,
+          "room": {
+              "id": 101,
+              "name": "Sala A"
+          },
+          "user": "johndoe",
+          "date": "2025-03-02",
+          "startTime": "10:00:00",
+          "endTime": "12:00:00"
+      }
+  ]
+  ```
 
-git checkout -b nombre-de-la-rama
+- **GET** `/v1/booking/{id}` - Obtiene una reserva por su ID.
 
-git add .
-git commit -m "Descripción del cambio"
-git push origin nombre-de-la-rama
+  _Response:_
+  ```json
+  {
+      "id": 1,
+      "room": {
+          "id": 101,
+          "name": "Sala A"
+      },
+      "user": "johndoe",
+      "date": "2025-03-02",
+      "startTime": "10:00:00",
+      "endTime": "12:00:00"
+  }
+  ```
 
+- **POST** `/v1/booking` - Registra una nueva reserva.
 
-```
+  _Request:_
+  ```json
+  {
+      "roomId": 101,
+      "user": "johndoe",
+      "date": "2025-03-02",
+      "startTime": "10:00:00",
+      "endTime": "12:00:00"
+  }
+  ```
+  _Response:_ `201 Created`
 
+- **PUT** `/v1/booking/{id}` - Actualiza una reserva existente.
+
+  _Request:_
+  ```json
+  {
+      "roomId": 101,
+      "user": "johndoe",
+      "date": "2025-03-03",
+      "startTime": "11:00:00",
+      "endTime": "13:00:00"
+  }
+  ```
+  _Response:_ `200 OK`
+
+- **DELETE** `/v1/booking/{id}` - Elimina una reserva.
+
+  _Response:_ `204 No Content`
+
+### Gestión de Salas (`/v1/rooms`)
+- **GET** `/v1/rooms` - Obtiene todas las salas.
+
+  _Response:_
+  ```json
+  [
+      {
+          "id": 101,
+          "name": "Sala de Reuniones A",
+          "capacity": 10,
+          "status": "AVAILABLE"
+      }
+  ]
+  ```
+
+- **GET** `/v1/rooms/{id}` - Obtiene una sala por su ID.
+
+  _Response:_
+  ```json
+  {
+      "id": 101,
+      "name": "Sala de Reuniones A",
+      "capacity": 10,
+      "status": "AVAILABLE"
+  }
+  ```
+
+- **POST** `/v1/rooms` - Registra una nueva sala.
+
+  _Request:_
+  ```json
+  {
+      "name": "Sala de Reuniones B",
+      "capacity": 20,
+      "status": "AVAILABLE"
+  }
+  ```
+  _Response:_ `201 Created`
+
+- **PUT** `/v1/rooms/{id}` - Actualiza una sala existente.
+
+  _Request:_
+  ```json
+  {
+      "name": "Sala de Reuniones B",
+      "capacity": 25,
+      "status": "OCCUPIED"
+  }
+  ```
+  _Response:_ `200 OK`
+
+- **DELETE** `/v1/rooms/{id}` - Elimina una sala.
+
+  _Response:_ `204 No Content`
+
+## Ejecución del Proyecto
+Para ejecutar el proyecto, sigue estos pasos:
+1. Clona el repositorio.
+2. Configura PostgreSQL con las credenciales adecuadas.
+3. Ejecuta el siguiente comando:
+   ```sh
+   mvn spring-boot:run
+   ```
+
+## Contribuciones
+Si deseas contribuir a este proyecto, sigue estos pasos:
+1. **Realiza un fork del repositorio:**
+   ```sh
+   git clone https://github.com/tu-usuario/coworking-space.git
+   ```
+2. **Crea una nueva rama:**
+   ```sh
+   git checkout -b feature-nueva-funcionalidad
+   ```
+3. **Realiza tus cambios y confírmalos:**
+   ```sh
+   git add .
+   git commit -m "Agregando nueva funcionalidad"
+   ```
+4. **Sube tus cambios a tu fork:**
+   ```sh
+   git push origin feature-nueva-funcionalidad
+   ```
+5. **Abre un Pull Request en GitHub y describe los cambios.**
 
 

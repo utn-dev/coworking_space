@@ -69,12 +69,15 @@ spring.jpa.show-sql=true
   _Request:_
   ```json
   {
-      "roomId": 101,
-      "user": "johndoe",
-      "date": "2025-03-02",
-      "startTime": "10:00:00",
-      "endTime": "12:00:00"
+  "room": {
+    "id": 1
+  },
+  "user": "John Doe",
+  "date": "2024-06-15",
+  "startTime": "10:00:00",
+  "endTime": "12:00:00" 
   }
+ 
   ```
   _Response:_ `201 Created`
 
@@ -83,11 +86,13 @@ spring.jpa.show-sql=true
   _Request:_
   ```json
   {
-      "roomId": 101,
-      "user": "johndoe",
-      "date": "2025-03-03",
-      "startTime": "11:00:00",
-      "endTime": "13:00:00"
+  "room": {
+    "id": 1
+  },
+  "user": "John Doe",
+  "date": "2024-06-15",
+  "startTime": "13:00:00",
+  "endTime": "16:00:00" 
   }
   ```
   _Response:_ `200 OK`
